@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Crie sua foto com a moldura #TôComJuca.">
+<title>#TôComJuca — Sua foto, sua força</title>
+
+<style>
+:root{
+  --blue:#063bd8;
+  --blue-dark:#052a9b;
+  --yellow:#ffd21a;
+  --white:#fff;
+  --bg:#f5f8ff;
+  --text:#10204a;
+  --muted:#64708a;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  color:var(--text);
+  background:linear-gradient(
+    135deg,
+    #eef4ff 0%,
+    #fff 55%,
+    #fff8cc 100%
+  );
+}
+
+header{
+  background:linear-gradient(
+    135deg,
+    var(--blue-dark),
+    var(--blue)
+  );
+  color:#fff;
+  padding:22px 6vw;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 6px 22px rgba(0,35,140,.18);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:900;
+  font-size:24px;
+}
+
+.brand-mark{
+  width:52px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.brand-mark img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.insta{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,.35);
+  padding:10px 16px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+.insta:hover{
+  background:rgba(255,255,255,.12);
+}
+
+main{
+  max-width:1180px;
+  margin:0 auto;
+  padding:42px 20px 70px;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:clamp(34px,6vw,64px);
+  line-height:1;
+  color:var(--blue-dark);
+}
+
+.hero h1 span{
+  color:#eab900;
+}
+
+.hero p{
+  font-size:18px;
+  color:var(--muted);
+  max-width:720px;
+  margin:16px auto 0;
+}
+
+.editor{
+  display:grid;
+  grid-template-columns:minmax(300px,1fr) minmax(320px,470px);
+  gap:30px;
+  align-items:start;
+}
+
+.card{
+  background:#fff;
+  border-radius:28px;
+  padding:24px;
+  box-shadow:0 18px 55px rgba(24,56,130,.13);
+  border:1px solid #e3eaff;
+}
+
+.preview-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+#stage{
+  width:min(100%,470px);
+  aspect-ratio:1/1;
+  border-radius:22px;
+  overflow:hidden;
+  background:#e9edf5;
+  position:relative;
+  box-shadow:inset 0 0 0 1px #d9e0ef;
+  user-select:none;
+  touch-action:none;
+}
+
+#photo{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:auto;
+  height:auto;
+  max-width:none;
+  transform-origin:center center;
+  display:none;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+#frame{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  user-select:none;
+}
+
+.empty{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:35px;
+  color:#69758e;
+}
+
+.empty strong{
+  display:block;
+  color:var(--blue-dark);
+  font-size:22px;
+  margin-bottom:7px;
+}
+
+.controls h2{
+  margin:0 0 18px;
+  font-size:24px;
+}
+
+.upload{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+input[type=file]{
+  display:none;
+}
+
+.upload-btn,
+.primary,
+.secondary{
+  border:0;
+  border-radius:14px;
+  padding:14px 18px;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  text-align:center;
+  transition:.2s;
+}
+
+.upload-btn,
+.primary{
+  background:var(--blue);
+  color:#fff;
+}
+
+.upload-btn:hover,
+.primary:hover{
+  background:var(--blue-dark);
+}
+
+.secondary{
+  background:#eef2ff;
+  color:var(--blue-dark);
+}
+
+.secondary:hover{
+  background:#e1e8ff;
+}
+
+.controls-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:20px;
+}
+
+.control{
+  background:#f7f9ff;
+  border-radius:16px;
+  padding:14px;
+}
+
+.control label{
+  font-weight:800;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+
+input[type=range]{
+  width:100%;
+  accent-color:var(--blue);
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+}
+
+.download{
+  background:linear-gradient(
+    135deg,
+    #ffd800,
+    #f4b900
+  );
+  color:#16203d;
+}
+
+.download:hover{
+  filter:brightness(.97);
+}
+
+.help{
+  margin-top:18px;
+  padding:16px;
+  border-radius:16px;
+  background:#fff9d9;
+  border:1px solid #ffe57b;
+  color:#5e5000;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:30px;
+}
+
+.step{
+  background:#fff;
+  border:1px solid #e3eaff;
+  border-radius:18px;
+  padding:20px;
+}
+
+.step b{
+  display:block;
+  color:var(--blue);
+  font-size:18px;
+  margin-bottom:7px;
+}
+
+footer{
+  text-align:center;
+  padding:25px;
+  color:#74809a;
+  font-size:14px;
+}
+
+@media(max-width:850px){
+
+  header{
+    padding:17px 20px;
+  }
+
+  .brand{
+    font-size:20px;
+  }
+
+  .insta{
+    padding:9px 12px;
+    font-size:13px;
+  }
+
+  .editor{
+    grid-template-columns:1fr;
+  }
+
+  .controls{
+    order:-1;
+  }
+
+  .steps{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:480px){
+
+  main{
+    padding:28px 12px 50px;
+  }
+
+  .card{
+    padding:16px;
+    border-radius:22px;
+  }
+
+  .hero p{
+    font-size:16px;
+  }
+
+  .controls-grid,
+  .actions{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="brand">
+
+    <div class="brand-mark">
+      <img src="logo-juca.png" alt="Logo Juca">
+    </div>
+
+    <div>#TÔ COM JUCA</div>
+
+  </div>
+
+  <a
+    class="insta"
+    href="https://www.instagram.com/jucadoguaranafilho.oficial/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Instagram do Juca ↗
+  </a>
+
+</header>
+
+<main>
+
+  <section class="hero">
+
+    <h1>
+      Mostre que você está
+      <span>#TôComJuca</span>
+    </h1>
+
+    <p>
+      Envie sua foto, ajuste do seu jeito e baixe sua imagem
+      pronta para compartilhar nas redes sociais.
+    </p>
+
+  </section>
+
+  <section class="editor">
+
+    <div class="card preview-wrap">
+
+      <div
+        id="stage"
+        aria-label="Pré-visualização da sua foto"
+      >
+
+        <div class="empty" id="empty">
+
+          <div>
+            <strong>Adicione sua foto</strong>
+            <span>
+              Clique em “Escolher foto” para começar.
+            </span>
+          </div>
+
+        </div>
+
+        <img
+          id="photo"
+          alt="Sua foto"
+          draggable="false"
+        >
+
+        <img
+          id="frame"
+          src="moldura-juca.png"
+          alt="Moldura #TôComJuca"
+          draggable="false"
+        >
+
+      </div>
+
+    </div>
+
+    <div class="card controls">
+
+      <h2>Edite sua foto</h2>
+
+      <div class="upload">
+
+        <label
+          class="upload-btn"
+          for="fileInput"
+        >
+          📷 Escolher foto
+        </label>
+
+        <!--
+          IMPORTANTE:
+          accept="image/*" permite escolher fotos da galeria.
+          capture NÃO foi colocado aqui para não forçar a câmera.
+        -->
+        <input
+          id="fileInput"
+          type="file"
+          accept="image/*"
+        >
+
+        <button
+          class="secondary"
+          id="replaceBtn"
+          type="button"
+        >
+          Trocar foto
+        </button>
+
+      </div>
+
+      <div class="controls-grid">
+
+        <div class="control">
+
+          <label for="zoom">
+            Zoom
+            <span id="zoomValue">100%</span>
+          </label>
+
+          <input
+            id="zoom"
+            type="range"
+            min="50"
+            max="220"
+            value="100"
+          >
+
+        </div>
+
+        <div class="control">
+
+          <label for="rotation">
+            Girar
+            <span id="rotationValue">0°</span>
+          </label>
+
+          <input
+            id="rotation"
+            type="range"
+            min="-180"
+            max="180"
+            value="0"
+          >
+
+        </div>
+
+        <div class="control">
+
+          <label for="brightness">
+            Brilho
+            <span id="brightnessValue">100%</span>
+          </label>
+
+          <input
+            id="brightness"
+            type="range"
+            min="60"
+            max="140"
+            value="100"
+          >
+
+        </div>
+
+        <div class="control">
+
+          <label for="contrast">
+            Contraste
+            <span id="contrastValue">100%</span>
+          </label>
+
+          <input
+            id="contrast"
+            type="range"
+            min="70"
+            max="140"
+            value="100"
+          >
+
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="secondary"
+          id="reset"
+          type="button"
+        >
+          ↺ Restaurar
+        </button>
+
+        <button
+          class="primary download"
+          id="download"
+          type="button"
+        >
+          ⬇ Baixar foto
+        </button>
+
+      </div>
+
+      <div class="help">
+
+        <b>Dica:</b>
+        depois de adicionar a foto, arraste a imagem dentro
+        do quadro para posicionar. Use o zoom para enquadrar melhor.
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="steps">
+
+    <div class="step">
+      <b>1. Escolha sua foto</b>
+      Use uma foto do celular ou computador.
+    </div>
+
+    <div class="step">
+      <b>2. Ajuste</b>
+      Arraste, aumente ou diminua e gire até ficar do jeito que quiser.
+    </div>
+
+    <div class="step">
+      <b>3. Baixe e compartilhe</b>
+      Baixe a imagem pronta e publique nas suas redes.
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  #TôComJuca • Sua foto fica no seu dispositivo e não é enviada para nenhum servidor.
+</footer>
+
+<script>
+
+const fileInput = document.getElementById('fileInput');
+const replaceBtn = document.getElementById('replaceBtn');
+
+const photo = document.getElementById('photo');
+const empty = document.getElementById('empty');
+const stage = document.getElementById('stage');
+const frame = document.getElementById('frame');
+
+const zoom = document.getElementById('zoom');
+const rotation = document.getElementById('rotation');
+const brightness = document.getElementById('brightness');
+const contrast = document.getElementById('contrast');
+
+const zoomValue = document.getElementById('zoomValue');
+const rotationValue = document.getElementById('rotationValue');
+const brightnessValue = document.getElementById('brightnessValue');
+const contrastValue = document.getElementById('contrastValue');
+
+let img = new Image();
+
+let imageUrl = null;
+
+let hasPhoto = false;
+
+let state = {
+  x: 0,
+  y: 0,
+  zoom: 1,
+  rotation: 0,
+  brightness: 100,
+  contrast: 100
+};
+
+let dragging = false;
+
+let startX = 0;
+let startY = 0;
+let startPX = 0;
+let startPY = 0;
+
+
+/* =========================================================
+   ABRIR GALERIA
+========================================================= */
+
+function openPicker(){
+
+  /*
+    Limpa o valor anterior.
+
+    Isso é importante porque, se o usuário escolher
+    novamente exatamente a mesma foto, o evento "change"
+    pode não disparar em alguns navegadores.
+  */
+  fileInput.value = '';
+
+  fileInput.click();
+}
+
+replaceBtn.addEventListener('click', openPicker);
+
+
+/* =========================================================
+   SELEÇÃO DA FOTO
+========================================================= */
+
+fileInput.addEventListener('change', function(event){
+
+  const file = event.target.files && event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  /*
+    Confirma que realmente é uma imagem.
+  */
+  if(!file.type || !file.type.startsWith('image/')){
+
+    alert('Por favor, escolha uma imagem.');
+
+    return;
+  }
+
+
+  /*
+    Libera a URL anterior para evitar
+    acúmulo de memória.
+  */
+  if(imageUrl){
+
+    URL.revokeObjectURL(imageUrl);
+
+    imageUrl = null;
+  }
+
+
+  imageUrl = URL.createObjectURL(file);
+
+
+  /*
+    Criamos uma nova imagem para carregar
+    a foto selecionada.
+  */
+  const newImage = new Image();
+
+
+  newImage.onload = function(){
+
+    img = newImage;
+
+    /*
+      Mostra a foto.
+    */
+    photo.src = imageUrl;
+
+    photo.style.display = 'block';
+
+    empty.style.display = 'none';
+
+    hasPhoto = true;
+
+
+    /*
+      Restaura os controles.
+    */
+    resetState();
+
+
+    /*
+      Atualiza a visualização.
+    */
+    update();
+
+  };
+
+
+  newImage.onerror = function(){
+
+    alert(
+      'Não foi possível carregar essa foto. ' +
+      'Tente escolher outra imagem.'
+    );
+
+    hasPhoto = false;
+
+    photo.style.display = 'none';
+
+    empty.style.display = 'grid';
+
+  };
+
+
+  newImage.src = imageUrl;
+
+});
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetState(){
+
+  state = {
+    x: 0,
+    y: 0,
+    zoom: 1,
+    rotation: 0,
+    brightness: 100,
+    contrast: 100
+  };
+
+
+  zoom.value = 100;
+  rotation.value = 0;
+  brightness.value = 100;
+  contrast.value = 100;
+}
+
+
+/* =========================================================
+   ATUALIZAR VISUALIZAÇÃO
+========================================================= */
+
+function update(){
+
+  if(!hasPhoto || !img.naturalWidth){
+
+    photo.style.display = 'none';
+
+    return;
+  }
+
+
+  photo.style.display = 'block';
+
+
+  /*
+    Faz a imagem cobrir completamente o quadro.
+
+    Isso evita que apareçam espaços vazios.
+  */
+  const stageWidth = stage.clientWidth;
+  const stageHeight = stage.clientHeight;
+
+  const scale = Math.max(
+    stageWidth / img.naturalWidth,
+    stageHeight / img.naturalHeight
+  );
+
+
+  const width = img.naturalWidth * scale * state.zoom;
+
+
+  photo.style.width = width + 'px';
+  photo.style.height = 'auto';
+
+
+  photo.style.transform =
+    `translate(calc(-50% + ${state.x}px), ` +
+    `calc(-50% + ${state.y}px)) ` +
+    `rotate(${state.rotation}deg)`;
+
+
+  photo.style.filter =
+    `brightness(${state.brightness}%) ` +
+    `contrast(${state.contrast}%)`;
+
+
+  zoomValue.textContent =
+    Math.round(state.zoom * 100) + '%';
+
+  rotationValue.textContent =
+    Math.round(state.rotation) + '°';
+
+  brightnessValue.textContent =
+    state.brightness + '%';
+
+  contrastValue.textContent =
+    state.contrast + '%';
+}
+
+
+/* =========================================================
+   CONTROLES
+========================================================= */
+
+zoom.addEventListener('input', function(){
+
+  state.zoom = Number(this.value) / 100;
+
+  update();
+
+});
+
+
+rotation.addEventListener('input', function(){
+
+  state.rotation = Number(this.value);
+
+  update();
+
+});
+
+
+brightness.addEventListener('input', function(){
+
+  state.brightness = Number(this.value);
+
+  update();
+
+});
+
+
+contrast.addEventListener('input', function(){
+
+  state.contrast = Number(this.value);
+
+  update();
+
+});
+
+
+/* =========================================================
+   ARRASTAR FOTO
+========================================================= */
+
+stage.addEventListener('pointerdown', function(event){
+
+  if(!hasPhoto){
+    return;
+  }
+
+
+  dragging = true;
+
+
+  stage.setPointerCapture(event.pointerId);
+
+
+  startX = event.clientX;
+  startY = event.clientY;
+
+  startPX = state.x;
+  startPY = state.y;
+
+
+  stage.style.cursor = 'grabbing';
+
+});
+
+
+stage.addEventListener('pointermove', function(event){
+
+  if(!dragging){
+    return;
+  }
+
+
+  state.x =
+    startPX + (event.clientX - startX);
+
+  state.y =
+    startPY + (event.clientY - startY);
+
+
+  update();
+
+});
+
+
+function stopDragging(){
+
+  dragging = false;
+
+  stage.style.cursor = hasPhoto
+    ? 'grab'
+    : 'default';
+}
+
+
+stage.addEventListener(
+  'pointerup',
+  stopDragging
+);
+
+stage.addEventListener(
+  'pointercancel',
+  stopDragging
+);
+
+stage.addEventListener(
+  'lostpointercapture',
+  stopDragging
+);
+
+
+/* =========================================================
+   RESETAR BOTÃO
+========================================================= */
+
+document.getElementById('reset')
+.addEventListener('click', function(){
+
+  resetState();
+
+  update();
+
+});
+
+
+/* =========================================================
+   REDIMENSIONAMENTO
+========================================================= */
+
+window.addEventListener('resize', function(){
+
+  update();
+
+});
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+document.getElementById('download')
+.addEventListener('click', async function(){
+
+  if(!hasPhoto){
+
+    alert('Escolha uma foto primeiro.');
+
+    return;
+  }
+
+
+  /*
+    Tamanho final da imagem.
+  */
+  const size = 1254;
+
+  const canvas =
+    document.createElement('canvas');
+
+  canvas.width = size;
+  canvas.height = size;
+
+
+  const ctx = canvas.getContext('2d');
+
+
+  if(!ctx){
+
+    alert(
+      'Seu navegador não conseguiu criar a imagem.'
+    );
+
+    return;
+  }
+
+
+  /*
+    O cálculo abaixo é o mesmo conceito usado
+    na pré-visualização.
+  */
+  const stageWidth = stage.clientWidth;
+  const stageHeight = stage.clientHeight;
+
+
+  const baseScale = Math.max(
+    stageWidth / img.naturalWidth,
+    stageHeight / img.naturalHeight
+  );
+
+
+  const previewWidth =
+    img.naturalWidth *
+    baseScale *
+    state.zoom;
+
+
+  const previewHeight =
+    img.naturalHeight *
+    baseScale *
+    state.zoom;
+
+
+  /*
+    Converte o deslocamento da tela para
+    o tamanho final de 1254px.
+  */
+  const exportScale =
+    size / stageWidth;
+
+
+  const x =
+    size / 2 +
+    state.x * exportScale;
+
+  const y =
+    size / 2 +
+    state.y * exportScale;
+
+
+  const finalWidth =
+    previewWidth * exportScale;
+
+  const finalHeight =
+    previewHeight * exportScale;
+
+
+  ctx.save();
+
+
+  ctx.translate(x, y);
+
+
+  ctx.rotate(
+    state.rotation * Math.PI / 180
+  );
+
+
+  ctx.filter =
+    `brightness(${state.brightness}%) ` +
+    `contrast(${state.contrast}%)`;
+
+
+  ctx.drawImage(
+    img,
+    -finalWidth / 2,
+    -finalHeight / 2,
+    finalWidth,
+    finalHeight
+  );
+
+
+  ctx.restore();
+
+
+  /*
+    Carrega a moldura.
+  */
+  const frameImage = new Image();
+
+
+  frameImage.onload = function(){
+
+    ctx.drawImage(
+      frameImage,
+      0,
+      0,
+      size,
+      size
+    );
+
+
+    /*
+      Usa toBlob() em vez de toDataURL().
+      É mais eficiente para imagens grandes.
+    */
+    canvas.toBlob(function(blob){
+
+      if(!blob){
+
+        alert(
+          'Não foi possível gerar o arquivo.'
+        );
+
+        return;
+      }
+
+
+      const downloadUrl =
+        URL.createObjectURL(blob);
+
+
+      const link =
+        document.createElement('a');
+
+
+      link.href = downloadUrl;
+
+      link.download =
+        'to-com-juca.png';
+
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+
+      setTimeout(function(){
+
+        URL.revokeObjectURL(downloadUrl);
+
+      }, 1000);
+
+    }, 'image/png');
+
+  };
+
+
+  frameImage.onerror = function(){
+
+    alert(
+      'Não foi possível carregar a moldura. ' +
+      'Verifique se o arquivo "moldura-juca.png" ' +
+      'está na mesma pasta do HTML.'
+    );
+
+  };
+
+
+  frameImage.src = frame.src;
+
+});
+
+
+/* =========================================================
+   ESTADO INICIAL
+========================================================= */
+
+stage.style.cursor = 'default';
+
+</script>
+
+</body>
+</html>
